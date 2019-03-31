@@ -24,7 +24,9 @@ except OSError:
 
 
 
-tiles = image_slicer.slice('originalImage/TedX.jpg', 1000, save=False)
+# tiles = image_slicer.slice('originalImage/TedX.jpg', 1000, save=False)
+#
+tiles = image_slicer.slice('originalImage/mosaicTest.jpg', 1000, save=False)
 image_slicer.save_tiles(tiles, directory=destination_dir, prefix='slice')
 dict = {}
 for tile in tiles:

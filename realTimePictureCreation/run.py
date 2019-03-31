@@ -66,7 +66,7 @@ def run():
         print i
         if new_addings:
             generate_result_picture()
-        # sleep(1)
+        # sleep(5)
 
 
 def list_pictures():
