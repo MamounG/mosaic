@@ -46,13 +46,14 @@ def clean_and_init():
 
 def run():
     i=0
-    while i<100:
+    while True:
         picture_list = list_pictures()
         new_pictures_only = compare_to_previous(picture_list)
 
         new_addings = False
         # print new_pictures_only
         for pic_name in new_pictures_only:
+            print pic_name
             add_picture_to_previous(pic_name)
             mask_file_name = choose_random_mask()
             if (mask_file_name != ""):
@@ -66,7 +67,7 @@ def run():
         print i
         if new_addings:
             generate_result_picture()
-        # sleep(5)
+        sleep(5)
 
 
 def list_pictures():
@@ -74,11 +75,20 @@ def list_pictures():
     return picture_list
 
 def compare_to_previous(all_pictures):
-    return all_pictures
+    only_new_pics = []
+    f = open(previous_picture_list, "r")
+    used_pics = f.read().split("\n")
+    f.close()
+    for p in all_pictures:
+        if p not in used_pics:
+            only_new_pics.append(p)
+
+    return only_new_pics
 
 def add_picture_to_previous(pic):
-    # print pic
-    pass
+    f = open(previous_picture_list, "a")
+    f.write(pic +"\n")
+    f.close()
 
 def choose_random_mask():
     all_masks = os.listdir(path_to_mask)

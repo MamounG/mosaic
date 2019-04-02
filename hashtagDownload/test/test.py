@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3.6
 # -*- coding: utf-8 -*-
 
 import urllib.request
@@ -8,8 +8,12 @@ from urllib import request
 from bs4 import BeautifulSoup
 import ssl
 import json
+from PIL import Image
+from time import sleep
 
 hashtag = "tedxodense"
+tmp_folder = "tmp/"
+dest_folder = "../../realTimePictureCreation/mosaicImages/"
 
 class Insta_Image_Links_Scraper:
 
@@ -22,6 +26,7 @@ class Insta_Image_Links_Scraper:
             t.startswith('window._sharedData'))
         page_json = script.text.split(' = ', 1)[1].rstrip(';')
         data = json.loads(page_json)
+        print(script)
         print ('Scraping links with #' + hashtag+"...........")
         img_links = []
         for post in data['entry_data']['TagPage'][0]['graphql'
@@ -69,7 +74,12 @@ class Insta_Image_Links_Scraper:
             hs = open(hashtag + '.txt', 'a')
             hs.write(im + '\n')
             hs.close()
+            self.copy_images(s + ".jpg")
 
+    def copy_images(self, org_name):
+        im = Image.open(tmp_folder + org_name)
+        pic_name = org_name.split(".")
+        im.save(dest_folder + pic_name[0] + ".png")
 
     def main(self):
         self.ctx = ssl.create_default_context()
@@ -84,8 +94,11 @@ class Insta_Image_Links_Scraper:
                                       + hashtag + '/')
         new_img_link = self.find_new_links(all_img_links, hashtag + ".txt")
         # self.download_new_images(new_img_link, "hashtag_pictures/")
-        self.download_new_images(new_img_link, "../../realTimePictureCreation/mosaicImages/")
+        self.download_new_images(new_img_link, tmp_folder)
+
 
 if __name__ == '__main__':
     obj = Insta_Image_Links_Scraper()
-    obj.main()
+    while True:
+        obj.main()
+        sleep(4)
